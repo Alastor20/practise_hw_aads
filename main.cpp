@@ -3,23 +3,23 @@
 
 template < class T > T *merge(const T *const *a, size_t sa, const size_t *sai, T *c)
 {
-  size_t size = std::size(c);
-  size_t *szs = new size_t[sa];
-  for (size_t i = 0; i < size; ++i) {
-    size_t idx = 0;
+  size_t totalSize = std::size(c);
+  size_t *sizes = new size_t[sa];
+  for (size_t i = 0; i < totalSize; ++i) {
+    size_t index = 0;
     for (size_t j = 0; j < sa; ++j) {
-      if (szs[j] < sai[j]) {
-        if (a[idx][szs[idx]] > a[j][szs[j]]) {
-          idx = j;
+      if (sizes[j] < sai[j]) {
+        if (a[index][sizes[index]] > a[j][sizes[j]]) { // T::operator<
+          index = j;
         }
       }
     }
-    c[i] = a[idx][szs[idx]];
-    ++szs[idx];
+    c[i] = a[index][sizes[index]]; // T::T(const T&)
+    ++sizes[index];
   }
-  delete[] szs;
+  delete[] sizes;
   return c;
 }
 
-int main()
-{}
+// Неявный интерфейс: T::operator<, T::T(const T&)
+// Недостатки явного интерфейса: пользователю самому придётся выделять память под функцию
